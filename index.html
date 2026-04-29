@@ -1408,6 +1408,7 @@ function renderClientProfile(){
                   ${q.status==='draft'?`<button class="btn btn-blue btn-sm" onclick="markSent(${q.id})">📤 Mark Sent</button>`:''}
                   ${q.status!=='accepted'&&q.status!=='rejected'?`<button class="btn btn-green btn-sm" onclick="acceptQuote(${q.id})">✓ Accept → Pipeline</button>`:''}
                   ${q.status!=='accepted'&&q.status!=='rejected'?`<button class="btn btn-red btn-sm" onclick="rejectQuote(${q.id})">✗ Reject</button>`:''}
+                ${q.pdfUrl?`<a href="${q.pdfUrl}" target="_blank" class="btn btn-ghost btn-sm">📄 View PDF</a><button class="btn btn-ghost btn-sm" onclick="removePdf(${q.id})">Remove PDF</button>`:`<button id="pdf-btn-${q.id}" class="btn btn-ghost btn-sm" onclick="uploadPdf(${q.id})">📎 Upload PDF</button>`}
                   ${q.status==='accepted'?`<button class="btn btn-ghost btn-sm" onclick="viewDealForQuote(${q.id})">View Deal →</button>`:''}
                 </div>
               </div>
@@ -1652,6 +1653,35 @@ function deleteContact(id){contacts=contacts.filter(c=>c.id!==id);saveAll();rend
 
 // ── QUOTES ────────────────────────────────────────────────────
 // ── QUOTES ────────────────────────────────────────────────────
+
+async function uploadPdf(quoteId){
+  const inp=document.createElement("input");
+  inp.type="file";inp.accept="application/pdf";
+  inp.onchange=async()=>{
+    const file=inp.files[0];if(!file)return;
+    const btn=document.getElementById("pdf-btn-"+quoteId);
+    if(btn){btn.disabled=true;btn.textContent="Uploading...";}
+    try{
+      await db.storage.createBucket("quote-pdfs",{public:true}).catch(()=>{});
+      const path=quoteId+"/"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const{error}=await db.storage.from("quote-pdfs").upload(path,file,{upsert:true,contentType:"application/pdf"});
+      if(error)throw error;
+      const{data:u}=db.storage.from("quote-pdfs").getPublicUrl(path);
+      const q=quotes.find(x=>x.id===quoteId);
+      if(q){q.pdfUrl=u.publicUrl;await pushToCloud();renderQuotes();}
+      alert("PDF uploaded!");
+    }catch(e){
+      alert("Upload failed: "+e.message);
+      if(btn){btn.disabled=false;btn.textContent="Upload PDF";}
+    }
+  };
+  inp.click();
+}
+async function removePdf(quoteId){
+  if(!confirm("Remove PDF?"))return;
+  const q=quotes.find(x=>x.id===quoteId);
+  if(q){delete q.pdfUrl;await pushToCloud();renderQuotes();}
+}
 function renderQuotes(){
   if(!quotes.length){
     document.getElementById('quotes-body').innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">No quotes yet</div><div class="empty-sub">Create your first quote from a client profile or click + New Quote</div></div>`;
