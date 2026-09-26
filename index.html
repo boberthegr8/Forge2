@@ -20,21 +20,22 @@
     <div class="nav"><a class="active" href="#"><span class="navicon">HM</span>Home</a></div>
     <div class="navlabel" style="margin-top:6px">Forge Suite</div>
     <nav class="nav" id="suiteNav">
-      <a href="https://forge-crm-six.vercel.app"><span class="navicon">CR</span>CRM</a>
-      <a href="https://robquotes.vercel.app"><span class="navicon">RD</span>Reader</a>
-      <a href="https://forge-scope.vercel.app"><span class="navicon">SC</span>Scope</a>
-      <a href="https://lumber-estimator-ai.vercel.app"><span class="navicon">QT</span>Quote / AI Quoter</a>
-      <a href="https://forge-crm-six.vercel.app/purchasing"><span class="navicon">PO</span>Purchasing</a>
-      <a href="https://forge-crm-six.vercel.app/deliveries"><span class="navicon">OP</span>Operations</a>
-      <a href="https://forgemfg.vercel.app"><span class="navicon">MF</span>Manufacturing</a>
-      <a href="https://forge-portal-pi.vercel.app"><span class="navicon">PT</span>Portal</a>
+      <a href="https://crm.forgehub.dev"><span class="navicon">CR</span>CRM</a>
+      <a href="https://reader.forgehub.dev"><span class="navicon">RD</span>Reader</a>
+      <a href="https://scope.forgehub.dev"><span class="navicon">SC</span>Scope</a>
+      <a href="https://quote.forgehub.dev"><span class="navicon">QT</span>Quote / AI Quoter</a>
+      <a href="https://crm.forgehub.dev/#/purchasing"><span class="navicon">PO</span>Purchasing</a>
+      <a href="https://crm.forgehub.dev/#/deliveries"><span class="navicon">OP</span>Operations</a>
+      <a href="https://manufacturing.forgehub.dev"><span class="navicon">MF</span>Manufacturing</a>
+      <a href="https://portal.forgehub.dev"><span class="navicon">PT</span>Portal</a>
+      <a href="https://choose-screensaver-boom-alpha.trycloudflare.com"><span class="navicon">AI</span>Hermes</a>
     </nav>
     <div class="sidefoot"><strong><span class="dot"></span>Forge Core</strong><span id="coreStatus">Waiting for sign in</span></div>
   </aside>
   <main class="main">
     <header class="topbar">
       <div class="crumb"><small>Forge Suite</small><strong>Home</strong></div>
-      <div class="account"><div class="orgpill" id="orgPill">Not signed in</div><button class="btn hidden" id="signOutBtn">Sign out</button></div>
+      <div class="account"><div class="orgpill" id="orgPill">Not signed in</div><a class="btn" href="/account.html">Account &amp; admin</a><button class="btn hidden" id="signOutBtn">Sign out</button></div>
     </header>
     <div class="accentline"></div>
     <div class="content">
@@ -42,13 +43,13 @@
         <div class="eyebrow">Forge Core</div><h2>Sign in to Forge</h2>
         <p>One Core account for the Forge suite. Enter your email and Forge will send a passwordless sign-in link.</p>
         <div class="form"><input class="input" id="emailInput" type="email" autocomplete="email" placeholder="you@company.com"/><button class="btn primary" id="magicBtn">Send sign-in link</button></div>
-        <div class="notice" id="signinNotice"></div>
+        <div class="notice" id="signinNotice"></div><p><a href="/account.html">Register a new account or manage access →</a></p>
       </section>
       <section id="loadingPanel" class="loading hidden">Loading Forge Core…</section>
       <section id="dashboard" class="hidden">
         <div class="hero">
           <div><div class="eyebrow">Forge Command Center</div><h2 id="welcomeTitle">Good to see you.</h2><p id="welcomeMeta">Live operational view across the Forge suite.</p></div>
-          <div class="quick"><a href="https://forge-crm-six.vercel.app/quotes">Open Quotes</a><a href="https://forge-crm-six.vercel.app/purchasing">Create PO</a><a href="https://forge-crm-six.vercel.app/deliveries">Schedule Delivery</a></div>
+          <div class="quick"><a href="https://crm.forgehub.dev/#/quotes">Open Quotes</a><a href="https://crm.forgehub.dev/#/purchasing">Create PO</a><a href="https://crm.forgehub.dev/#/deliveries">Schedule Delivery</a></div>
         </div>
         <div class="grid stats">
           <div class="stat"><div class="stathead"><span>Projects</span><span>CRM</span></div><div class="statnum" id="statProjects">—</div><div class="statmeta">active / current jobs</div></div>
@@ -59,14 +60,14 @@
           <div class="stat"><div class="stathead"><span>Tasks</span><span>Core</span></div><div class="statnum" id="statTasks">—</div><div class="statmeta">open items requiring follow-up</div></div>
         </div>
         <div class="grid modules">
-          <a class="module" href="https://forge-crm-six.vercel.app"><div class="moduletop"><div class="modulebadge">CRM</div><span class="live">Live</span></div><h4>CRM</h4><p>Customers, projects, quotes, follow-ups and the commercial pipeline.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://robquotes.vercel.app"><div class="moduletop"><div class="modulebadge">RDR</div><span class="live">Live</span></div><h4>Reader</h4><p>Drawing and PDF understanding feeding structured Forge records.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://forge-scope.vercel.app"><div class="moduletop"><div class="modulebadge">SCP</div><span class="live">Live</span></div><h4>Scope</h4><p>Scope creation, BOM comparison and drawing-backed project decisions.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://lumber-estimator-ai.vercel.app"><div class="moduletop"><div class="modulebadge">QTR</div><span class="live">Live</span></div><h4>Quote / AI Quoter</h4><p>Pricing, takeoff lineage, revisions and quote preparation.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://forge-crm-six.vercel.app/purchasing"><div class="moduletop"><div class="modulebadge">PO</div><span class="live">Live</span></div><h4>Purchasing</h4><p>Vendor POs, receiving history and inbound material scheduling.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://forge-crm-six.vercel.app/deliveries"><div class="moduletop"><div class="modulebadge">OPS</div><span class="live">Live</span></div><h4>Operations</h4><p>Inbound and outbound delivery scheduling, dispatch and status.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://forgemfg.vercel.app"><div class="moduletop"><div class="modulebadge">MFG</div><span class="live">Core</span></div><h4>Manufacturing</h4><p>Work orders, production stages, quantities and shop-floor routing.</p><span class="arrow">↗</span></a>
-          <a class="module" href="https://forge-portal-pi.vercel.app"><div class="moduletop"><div class="modulebadge">PTL</div><span class="live">Live</span></div><h4>Portal</h4><p>Secure customer/dealer project visibility, documents and approvals.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://crm.forgehub.dev"><div class="moduletop"><div class="modulebadge">CRM</div><span class="live">Live</span></div><h4>CRM</h4><p>Customers, projects, quotes, follow-ups and the commercial pipeline.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://reader.forgehub.dev"><div class="moduletop"><div class="modulebadge">RDR</div><span class="live">Live</span></div><h4>Reader</h4><p>Drawing and PDF understanding feeding structured Forge records.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://scope.forgehub.dev"><div class="moduletop"><div class="modulebadge">SCP</div><span class="live">Live</span></div><h4>Scope</h4><p>Scope creation, BOM comparison and drawing-backed project decisions.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://quote.forgehub.dev"><div class="moduletop"><div class="modulebadge">QTR</div><span class="live">Live</span></div><h4>Quote / AI Quoter</h4><p>Pricing, takeoff lineage, revisions and quote preparation.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://crm.forgehub.dev/#/purchasing"><div class="moduletop"><div class="modulebadge">PO</div><span class="live">Live</span></div><h4>Purchasing</h4><p>Vendor POs, receiving history and inbound material scheduling.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://crm.forgehub.dev/#/deliveries"><div class="moduletop"><div class="modulebadge">OPS</div><span class="live">Live</span></div><h4>Operations</h4><p>Inbound and outbound delivery scheduling, dispatch and status.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://manufacturing.forgehub.dev"><div class="moduletop"><div class="modulebadge">MFG</div><span class="live">Core</span></div><h4>Manufacturing</h4><p>Work orders, production stages, quantities and shop-floor routing.</p><span class="arrow">↗</span></a>
+          <a class="module" href="https://portal.forgehub.dev"><div class="moduletop"><div class="modulebadge">PTL</div><span class="live">Live</span></div><h4>Portal</h4><p>Secure customer/dealer project visibility, documents and approvals.</p><span class="arrow">↗</span></a>
         </div>
         <div class="grid twocol">
           <section class="card"><div class="sectionhead"><h3>Recent projects</h3><span>Forge Core</span></div><div class="list" id="recentProjects"></div></section>
@@ -88,11 +89,11 @@ function esc(v=''){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt
 function human(v=''){return String(v||'').replaceAll('_',' ').replace(/\b\w/g,m=>m.toUpperCase())}
 function fmtDate(v){if(!v)return 'No date';const d=new Date(v);return Number.isNaN(d.getTime())?v:d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}
 function show(panel){[signin,loading,dash].forEach(x=>x.classList.add('hidden'));panel.classList.remove('hidden')}
-async function signIn(){const email=$('emailInput').value.trim();if(!email){notice.textContent='Enter your email address.';notice.className='notice error';return} $('magicBtn').disabled=true;notice.textContent='Sending sign-in link…';notice.className='notice';const {error}=await supabase.auth.signInWithOtp({email,options:{emailRedirectTo:window.location.origin}});$('magicBtn').disabled=false;if(error){notice.textContent=error.message;notice.className='notice error';return}notice.textContent='Sign-in link sent. Open it on this device to enter Forge.'}
+async function signIn(){const email=$('emailInput').value.trim();if(!email){notice.textContent='Enter your email address.';notice.className='notice error';return} $('magicBtn').disabled=true;notice.textContent='Sending sign-in link…';notice.className='notice';const {error}=await supabase.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:window.location.origin+'/account.html'}});$('magicBtn').disabled=false;if(error){notice.textContent=error.message;notice.className='notice error';return}notice.textContent='Sign-in link sent. Open it on this device to enter Forge.'}
 $('magicBtn').addEventListener('click',signIn);$('emailInput').addEventListener('keydown',e=>{if(e.key==='Enter')signIn()});$('signOutBtn').addEventListener('click',async()=>{await supabase.auth.signOut();location.reload()});
 async function loadHome(user){show(loading);$('signOutBtn').classList.remove('hidden');
  const {data:membership,error:mErr}=await supabase.from('organization_memberships').select('organization_id,role,status').eq('user_id',user.id).eq('status','active').limit(1).maybeSingle();
- if(mErr||!membership){$('coreStatus').textContent='Signed in, no active organization';$('orgPill').textContent=user.email||'Signed in';show(dash);$('welcomeTitle').textContent='Forge account is not assigned';$('welcomeMeta').textContent='Your account is authenticated, but it has no active organization membership yet.';return}
+ if(mErr) throw mErr; if(!membership){location.replace('/account.html');return;}
  const orgId=membership.organization_id;
  const [{data:org},{data:locs}]=await Promise.all([supabase.from('organizations').select('id,name,slug').eq('id',orgId).maybeSingle(),supabase.from('locations').select('id,name,code,status').eq('organization_id',orgId).eq('status','active').order('name').limit(5)]);
  const location=(locs||[]).find(x=>x.code==='JK-MAIN')||(locs||[])[0];
@@ -120,8 +121,8 @@ function renderAttention({tasks,pos,dels,mfg}){const now=new Date(),week=new Dat
  dels.filter(x=>!CLOSED.has(String(x.status||'').toLowerCase())&&x.scheduled_start&&new Date(x.scheduled_start)<=week).slice(0,3).forEach(x=>arr.push({title:(x.direction==='inbound'?'Inbound':'Delivery')+' '+(x.delivery_number||''),meta:fmtDate(x.scheduled_start)+(x.truck?' · '+x.truck:''),kind:'info',tag:human(x.status)}));
  mfg.filter(x=>!CLOSED.has(String(x.status||'').toLowerCase())&&x.due_date&&new Date(x.due_date)<=week).slice(0,3).forEach(x=>arr.push({title:x.work_order_number||x.title||'Work order',meta:(x.product_type||'Production')+' · due '+fmtDate(x.due_date),kind:'warn',tag:human(x.status)}));
  const host=$('attentionList');if(!arr.length){host.innerHTML='<div class="empty">Nothing urgent right now.</div>';return}host.innerHTML=arr.slice(0,9).map(a=>`<div class="row"><div><strong>${esc(a.title)}</strong><small>${esc(a.meta)}</small></div><span class="tag ${a.kind}">${esc(a.tag)}</span></div>`).join('')}
-async function boot(){const {data:{session}}=await supabase.auth.getSession();if(session?.user){loadHome(session.user)}else{show(signin);$('coreStatus').textContent='Waiting for sign in'}}
-supabase.auth.onAuthStateChange((event,session)=>{if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session?.user)loadHome(session.user);if(event==='SIGNED_OUT')show(signin)});boot();
+async function boot(){const {data:{session}}=await supabase.auth.getSession();if(session?.user){await loadHome(session.user)}else{show(signin);$('coreStatus').textContent='Waiting for sign in'}}
+supabase.auth.onAuthStateChange((event,session)=>{if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session?.user)setTimeout(()=>void loadHome(session.user).catch(e=>{show(signin);notice.textContent=e.message}),0);if(event==='SIGNED_OUT')show(signin)});boot().catch(e=>{show(signin);notice.textContent=e.message});
 </script>
 </body>
 </html>
