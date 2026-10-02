@@ -22,7 +22,7 @@ async function refresh(){
     notice('Signed in as '+data.user.email);
     if(context.is_owner){
       $('member-summary').textContent='Your workspace access remains available. The owner console requires additional verification.';
-      $('continue').href='/';
+      $('continue').href=returnTo;
       if(context.admin_unlocked){show('member','admin');await loadDirectory();await loadAudit(true);}
       else{
         show('member','mfa');
@@ -50,7 +50,7 @@ $('login-form').addEventListener('submit',event=>{
   event.preventDefault();const form=event.currentTarget;
   void action(form.querySelector('button'),async()=>{
     const {error}=await core.auth.signInWithOtp({email:form.elements.email.value.trim(),options:{
-      shouldCreateUser:form.elements.register.checked,emailRedirectTo:location.origin+'/account.html'
+      shouldCreateUser:form.elements.register.checked,emailRedirectTo:location.origin+'/account.html?returnTo='+encodeURIComponent(new URL(returnTo,location.origin).href)
     }});
     if(error)throw error;
     notice('Check your email for the secure Forge sign-in link. Open it to continue.');

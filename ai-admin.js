@@ -1,3 +1,4 @@
+import './owner-ai.js';
 import {core} from './core-client.js';
 const parent=document.getElementById('admin');
 const section=document.createElement('section');section.className='panel';
