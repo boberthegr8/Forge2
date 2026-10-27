@@ -50,7 +50,8 @@ export const core = createClient('https://uyqanhwurngoupmvzxrh.supabase.co',
   });
 export const appOrigins = ['https://app.forgehub.dev','https://crm.forgehub.dev',
   'https://scope.forgehub.dev','https://reader.forgehub.dev','https://quote.forgehub.dev',
-  'https://manufacturing.forgehub.dev','https://portal.forgehub.dev'];
+  'https://manufacturing.forgehub.dev','https://portal.forgehub.dev','https://frame.forgehub.dev',
+  'https://todo.forgehub.dev','https://ai.forgehub.dev'];
 export function safeReturn(value) {
   try {
     const url=new URL(value);
