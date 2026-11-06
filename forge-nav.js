@@ -1,7 +1,7 @@
 /* Forge Suite sidebar — the ONE sidebar every Forge app shows.
    Single source of truth: https://app.forgehub.dev/forge-nav.js
    Apps load it with: <script src="https://app.forgehub.dev/forge-nav.js" defer></script>
-   To add/rename/reorder a page, edit SECTIONS below and redeploy the hub only. */
+   To add/rename/reorder a page, edit ITEMS below and redeploy the hub only. */
 (() => {
   if (window.__forgeNav) return;
   window.__forgeNav = true;
@@ -10,7 +10,7 @@
 
   const HUB = 'https://app.forgehub.dev';
   const CRM = 'https://crm.forgehub.dev';
-  const SECTIONS = [
+  const LEGACY_SECTIONS = [
     { label: 'Command', items: [
       { id: 'home', b: 'HM', t: 'Home', h: HUB + '/' },
     ]},
@@ -35,6 +35,19 @@
     ]},
   ];
 
+  // Keep legacy destinations (including Manufacturing) available for rollback,
+  // but only expose the consolidated hierarchy below.
+  const legacy = Object.fromEntries(LEGACY_SECTIONS.flatMap(s => s.items).map(i => [i.id, i]));
+  const item = (id, title, children) => ({ ...legacy[id], t: title || legacy[id].t, children });
+  const ITEMS = [
+    item('home', 'Home', [{ id:'analytics', b:'AN', t:'Analytics', h:HUB+'/#analytics' }]),
+    item('crm', 'CRM', ['crm-contacts','crm-quotes','crm-projects','purchasing'].map(id => item(id))),
+    item('scope', 'Estimating', [item('reader'), item('quote','AI Quoter'), item('frame','Frame')]),
+    item('delivery', 'Deliveries'), item('todo'), item('hermes', 'AI'),
+    { id:'admin', b:'AD', t:'Admin', h:HUB+'/admin.html', ownerOnly:true },
+    { id:'settings', b:'ST', t:'Settings', h:HUB+'/account.html', children:[item('portal','Customer Portal')] },
+  ];
+
   // Per-app: hide that app's old suite navigation so only this sidebar remains.
   // App-specific tools (Scope job types, Portal project list, Mfg work orders) stay.
   const HIDE = {
@@ -51,12 +64,17 @@
 
   function activeId() {
     const o = location.origin, hash = (location.hash || '#/').replace(/^#/, '').split('?')[0];
-    if (o === CRM) {
-      return ({ '/': 'crm-dash', '': 'crm-dash', '/crm': 'crm-contacts', '/quotes': 'crm-quotes',
-        '/projects': 'crm-projects', '/purchasing': 'purchasing', '/deliveries': 'delivery',
-      })[hash] || 'crm-dash';
+    if (o === HUB) {
+      if (location.pathname === '/admin.html') return 'admin';
+      if (location.pathname === '/account.html') return 'settings';
+      return location.hash === '#analytics' ? 'analytics' : 'home';
     }
-    for (const s of SECTIONS) for (const i of s.items) {
+    if (o === CRM) {
+      return ({ '/': 'crm', '': 'crm', '/crm': 'crm-contacts', '/quotes': 'crm-quotes',
+        '/projects': 'crm-projects', '/purchasing': 'purchasing', '/deliveries': 'delivery',
+      })[hash] || 'crm';
+    }
+    for (const i of ITEMS.flatMap(i => [i, ...(i.children || [])])) {
       try { if (new URL(i.h).origin === o && !i.h.startsWith(CRM)) return i.id; } catch {}
     }
     return '';
@@ -75,6 +93,9 @@
   #forge-nav .fn-brand small{display:block;color:#9aa0a6;margin-top:5px;font-size:9px;text-transform:uppercase;letter-spacing:.2em;font-weight:900}
   #forge-nav .fn-label{padding:6px 10px 2px;color:#686e75;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.18em}
   #forge-nav .fn-list{display:grid;gap:3px}
+  #forge-nav summary{cursor:pointer;margin:2px 10px 8px 49px;font-size:10px;color:#9aa0a6}
+  #forge-nav .fn-children{margin:0 0 8px 18px;border-left:1px solid #303030;padding-left:5px}
+  #forge-nav a:focus-visible,#forge-nav summary:focus-visible{outline:2px solid #ff7716;outline-offset:2px}
   #forge-nav a.fn-item{display:flex;align-items:center;gap:11px;text-decoration:none;color:#c9cdd1;padding:8px 10px;
     border:1px solid transparent;border-radius:10px;font-size:13px;font-weight:750;line-height:1.2;transition:.15s ease}
   #forge-nav a.fn-item:hover{background:#191919;border-color:#242424;color:#fff}
@@ -100,13 +121,14 @@
 
   function esc(v) { return String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
+  let isOwner = false;
   function render() {
     const active = activeId();
+    const link = i => `<a class="fn-item${i.id === active ? ' active' : ''}" data-id="${i.id}" href="${i.h}"${i.id === active ? ' aria-current="page"' : ''}><span class="fn-ico">${i.b}</span>${esc(i.t)}</a>`;
     return `<a class="fn-brand" href="${HUB}/" title="Forge Home"><div class="fn-mark">F</div><div><b>FORGE</b><small>Operating System</small></div></a>` +
-      SECTIONS.map(s => `<div><div class="fn-label">${esc(s.label)}</div><div class="fn-list">` +
-        s.items.map(i => `<a class="fn-item${i.id === active ? ' active' : ''}" data-id="${i.id}" href="${i.h}"><span class="fn-ico">${i.b}</span>${esc(i.t)}</a>`).join('') +
-        `</div></div>`).join('') +
-      `<div class="fn-foot"><span><i></i>Owner</span><a href="${HUB}/account.html?signout=1">Sign out</a></div>`;
+      `<div class="fn-list">` + ITEMS.filter(i => !i.ownerOnly || isOwner).map(i => `<div data-main="${i.id}">${link(i)}` +
+        (i.children ? `<details${i.children.some(c => c.id === active) ? ' open' : ''}><summary>${esc(i.t)} pages</summary><div class="fn-children">${i.children.map(link).join('')}</div></details>` : '') + `</div>`).join('') + `</div>` +
+      `<div class="fn-foot"><span>Forge account</span><a href="${HUB}/account.html?signout=1">Sign out</a></div>`;
   }
 
   function mount() {
@@ -120,18 +142,51 @@
     nav.setAttribute('aria-label', 'Forge Suite');
     nav.innerHTML = render();
     document.body.appendChild(nav);
+    // UI convenience only: admin.html retains its server-side owner/MFA checks.
+    // Never initialize a second auth client on another app's origin.
+    if (location.origin === HUB) {
+      import('./core-client.js').then(({ core }) => {
+        let generation = 0;
+        const update = value => {
+          isOwner = value;
+          nav.innerHTML = render();
+          const card = document.getElementById('adminModule');
+          if (card) card.hidden = !isOwner;
+        };
+        const refresh = async ticket => {
+          try {
+            const { data, error } = await core.rpc('forge_account_context');
+            if (ticket === generation) update(!error && data?.is_owner === true);
+          } catch { if (ticket === generation) update(false); }
+        };
+        core.auth.onAuthStateChange(event => {
+          const ticket = ++generation;
+          update(false);
+          // Do not await Supabase operations inside an auth callback.
+          if (event !== 'SIGNED_OUT') setTimeout(() => void refresh(ticket), 0);
+        });
+        void refresh(generation);
+      }).catch(() => { /* Unknown context stays fail-closed. */ });
+    }
     const toggle = document.createElement('button');
     toggle.id = 'forge-nav-toggle';
     toggle.type = 'button';
     toggle.setAttribute('aria-label', 'Open Forge menu');
     toggle.textContent = 'F';
-    toggle.onclick = () => document.documentElement.classList.toggle('forge-nav-open');
+    toggle.setAttribute('aria-controls', 'forge-nav');
+    toggle.setAttribute('aria-expanded', 'false');
+    const setOpen = open => {
+      document.documentElement.classList[open ? 'add' : 'remove']('forge-nav-open');
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close Forge menu' : 'Open Forge menu');
+    };
+    toggle.onclick = () => setOpen(!document.documentElement.classList.contains('forge-nav-open'));
+    window.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
     document.body.appendChild(toggle);
-    nav.addEventListener('click', e => { if (e.target.closest('a')) document.documentElement.classList.remove('forge-nav-open'); });
+    nav.addEventListener('click', e => { if (e.target.closest('a')) setOpen(false); });
     document.documentElement.classList.add('forge-nav-on');
     window.addEventListener('hashchange', () => {
-      const id = activeId();
-      nav.querySelectorAll('a.fn-item').forEach(a => a.classList.toggle('active', a.dataset.id === id));
+      nav.innerHTML = render();
     });
   }
 
