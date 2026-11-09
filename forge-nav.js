@@ -44,7 +44,7 @@
     item('crm', 'CRM', ['crm-contacts','crm-quotes','crm-projects','purchasing'].map(id => item(id))),
     item('scope', 'Estimating', [
       { id:'ai-takeoff', b:'AT', t:'AI Takeoff · 3D', h:'https://scope.forgehub.dev/' },
-      { id:'jobs', b:'JB', t:'Jobs & 3D models', h:'https://scope.forgehub.dev/job.html' },
+      { id:'jobs', b:'JB', t:'Jobs & 3D models', h:'https://scope.forgehub.dev/?view=jobs' },
       item('reader'), item('quote','AI Quoter'), item('frame','Frame')]),
     item('delivery', 'Deliveries'), item('todo'), item('hermes', 'AI'),
     { id:'admin', b:'AD', t:'Admin', h:HUB+'/admin.html', ownerOnly:true },
